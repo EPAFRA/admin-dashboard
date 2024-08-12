@@ -7,11 +7,9 @@ function ProductPage() {
   const [newProduct, setNewProduct] = useState({
     name: '',
     description: '',
-    category: '',
+    category_id: '',
     price: '',
-    sku: '',
     manufacturer: '',
-    is_out_of_stock: false,
     quantity: '',
     imageUrl: '',
   });
@@ -45,11 +43,9 @@ function ProductPage() {
     setNewProduct({
       name: '',
       description: '',
-      category: '',
+      category_id: '',
       price: '',
-      sku: '',
       manufacturer: '',
-      is_out_of_stock: false,
       quantity: '',
       imageUrl: '',
     });

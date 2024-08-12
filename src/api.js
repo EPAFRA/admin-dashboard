@@ -49,6 +49,7 @@ export const removeProduct = async (id) => {
 export const fetchCategories = async () => {
     try {
         const response = await axios.get(CATEGORY_API_URL);
+        console.log('category data:',response.data)
         return response.data;
     } catch (error) {
         console.error("Error fetching categories", error.response ? error.response.data : error.message);
