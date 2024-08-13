@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { removeProduct, addProduct, fetchProduct, updateProduct, fetchCategories } from '../api';
+import { removeProduct, addProduct, fetchProduct, updateProduct, fetchCategories,  addCategory, removeCategory } from '../api';
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -13,6 +13,7 @@ function ProductPage() {
     quantity: '',
     imageUrl: '',
   });
+  const [newCategory, setNewCategory] = useState('');
   const [editProduct, setEditProduct] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -33,6 +34,10 @@ function ProductPage() {
 
     getProductsAndCategories();
   }, []);
+  const getCategoryName = (categoryId) => {
+    const category = categories.find(cat => cat.id === categoryId);
+    return category ? category.name : 'Unknown Category';
+  };
 
   const getProduct = async () => {
     const productList = await fetchProduct();
@@ -80,12 +85,45 @@ function ProductPage() {
     setIsFormVisible(true); // Show the form when adding
   };
 
+  const handleAddCategory = async () => {
+    if (newCategory) {
+      const addedCategory = await addCategory({ name: newCategory });
+      setCategories([...categories, addedCategory]);
+      setNewCategory(''); // Clear the input field
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    await removeCategory(id);
+    setCategories(categories.filter(category => category.id !== id));
+  };
+
   return (
     <div className="product-management">
       <h1>Product Management</h1>
       {/* <button onClick={toggleFormVisibility}>
         {isFormVisible ? "Cancel" : editProduct ? "Edit Product" : "Add Product"}
       </button> */}
+        {/* Category Management Section */}
+        <div className="category-management">
+        <h2>Manage Categories</h2>
+        <input
+          type="text"
+          placeholder="New Category Name"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+        />
+        <button onClick={handleAddCategory}>Add Category</button>
+
+        <ul>
+          {categories.map(category => (
+            <li key={category.id}>
+              {category.name}
+              <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      </div>
       {!isFormVisible && (
         <div>
           <button onClick={handleAddButtonClick}>Add Product</button> {/* Button to add a new product */}
@@ -117,7 +155,7 @@ function ProductPage() {
                   <td>{product.manufacturer}</td>
                   <td>${product.price}</td>
                   <td>{product.is_out_of_stock}</td>
-                  <td>{product.category_id}</td>
+                  <td>{getCategoryName(product.category_id)}</td> {/* Display category name */}
                   <td>{product.quantity}</td>
                   <td><img src={product.imageUrl} alt={product.name} style={{ width: '50px', height: '50px' }} /></td>
                   {/* <td>{product.createdAt}</td> */}
