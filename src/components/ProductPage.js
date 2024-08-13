@@ -68,7 +68,7 @@ function ProductPage() {
       <table className="product-list">
         <thead>
           <tr>
-            <th>ID</th>
+            {/* <th>ID</th> */}
             <th>SKU</th>
             <th>Product Name</th>
             <th>Description</th>
@@ -86,7 +86,7 @@ function ProductPage() {
         <tbody>
           {products.map(product => (
             <tr key={product.id}>
-              <td>{product.id}</td>
+              {/* <td>{product.id}</td> */}
               <td>{product.sku}</td>
               <td>{product.name}</td>
               <td>{product.description}</td>
