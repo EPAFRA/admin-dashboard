@@ -66,17 +66,27 @@ function ProductPage() {
     setProducts(products.filter(product => product.id !== id));
   };
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-    if (editProduct) setEditProduct(null); // Reset edit mode if switching to add mode
+  // const toggleFormVisibility = () => {
+  //   setIsFormVisible(!isFormVisible);
+  //   if (editProduct) setEditProduct(null); // Reset edit mode if switching to add mode
+  // };
+  const handleEditButtonClick = (product) => {
+    setEditProduct(product);
+    setIsFormVisible(true); // Show the form when editing
+  };
+
+  const handleAddButtonClick = () => {
+    setEditProduct(null);
+    setIsFormVisible(true); // Show the form when adding
   };
 
   return (
     <div className="product-management">
       <h1>Product Management</h1>
-      <button onClick={toggleFormVisibility}>
+      {/* <button onClick={toggleFormVisibility}>
         {isFormVisible ? "Cancel" : editProduct ? "Edit Product" : "Add Product"}
-      </button>
+      </button> */}
+       <button onClick={handleAddButtonClick}>Add Product</button> {/* Button to add a new product */}
       <table className="product-list">
         <thead>
           <tr>
@@ -113,7 +123,8 @@ function ProductPage() {
              
               
               <td>
-                <button onClick={() => setEditProduct(product)}>Edit</button>
+                {/* <button onClick={() => setEditProduct(product)}>Edit</button> */}
+                <button onClick={() => handleEditButtonClick(product)}>Edit</button>
                 <button onClick={() => handleDeleteProduct(product.id)}>Delete</button>
               </td>
             </tr>
