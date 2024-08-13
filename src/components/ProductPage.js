@@ -14,6 +14,8 @@ function ProductPage() {
     imageUrl: '',
   });
   const [editProduct, setEditProduct] = useState(null);
+  const [isFormVisible, setIsFormVisible] = useState(false);
+
 
   useEffect(() => {
     const getProductsAndCategories = async () => {
@@ -49,12 +51,14 @@ function ProductPage() {
       quantity: '',
       imageUrl: '',
     });
+    setIsFormVisible(false); // Hide form after adding product
   };
 
   const handleEditProduct = async () => {
     const updatedProduct =  await updateProduct(editProduct.id, editProduct);
     setProducts(products.map(product => product.id === updatedProduct.id ? updatedProduct : product));
     setEditProduct(null);
+    setIsFormVisible(false); // Hide form after editing product
   };
 
   const handleDeleteProduct = async (id) => {
@@ -62,9 +66,17 @@ function ProductPage() {
     setProducts(products.filter(product => product.id !== id));
   };
 
+  const toggleFormVisibility = () => {
+    setIsFormVisible(!isFormVisible);
+    if (editProduct) setEditProduct(null); // Reset edit mode if switching to add mode
+  };
+
   return (
     <div className="product-management">
       <h1>Product Management</h1>
+      <button onClick={toggleFormVisibility}>
+        {isFormVisible ? "Cancel" : editProduct ? "Edit Product" : "Add Product"}
+      </button>
       <table className="product-list">
         <thead>
           <tr>
@@ -78,8 +90,8 @@ function ProductPage() {
             <th>Category</th>
             <th>quantity</th>
             <th>Image</th>
-            <th>Created At</th>
-            <th>Updated At</th> 
+            {/* <th>Created At</th> */}
+            {/* <th>Updated At</th>  */}
             <th>Actions</th>
           </tr>
         </thead>
@@ -96,8 +108,8 @@ function ProductPage() {
               <td>{product.category_id}</td>
               <td>{product.quantity}</td>
               <td><img src={product.imageUrl} alt={product.name} style={{ width: '50px', height: '50px' }} /></td>
-              <td>{product.createdAt}</td>
-              <td>{product.updatedAt}</td>
+              {/* <td>{product.createdAt}</td> */}
+              {/* <td>{product.updatedAt}</td> */}
              
               
               <td>
@@ -110,6 +122,7 @@ function ProductPage() {
       </table>
 
       {/* Form for adding or editing products */}
+      {isFormVisible && (
       <div className="product-form">
         <h2>{editProduct ? "Edit Product" : "Add Product"}</h2>
         {/* <input
@@ -175,6 +188,7 @@ function ProductPage() {
           {editProduct ? "Update Product" : "Add Product"}
         </button>
       </div>
+      )}
     </div>
   );
 }
