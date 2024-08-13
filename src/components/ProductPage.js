@@ -14,6 +14,7 @@ function ProductPage() {
     imageUrl: '',
   });
   const [newCategory, setNewCategory] = useState('');
+  const [isCategoryTableVisible, setIsCategoryTableVisible] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -107,22 +108,38 @@ function ProductPage() {
         {/* Category Management Section */}
         <div className="category-management">
         <h2>Manage Categories</h2>
-        <input
-          type="text"
-          placeholder="New Category Name"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-        />
-        <button onClick={handleAddCategory}>Add Category</button>
-
-        <ul>
-          {categories.map(category => (
-            <li key={category.id}>
-              {category.name}
-              <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
+        <button onClick={() => setIsCategoryTableVisible(!isCategoryTableVisible)}>
+          {isCategoryTableVisible ? 'Hide Categories' : 'Show Categories'}
+        </button>
+        {isCategoryTableVisible && (
+          <div>
+            <input
+              type="text"
+              placeholder="New Category Name"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
+            <button onClick={handleAddCategory}>Add Category</button>
+            <table className="category-table">
+              <thead>
+                <tr>
+                  <th>Category Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.map(category => (
+                  <tr key={category.id}>
+                    <td>{category.name}</td>
+                    <td>
+                      <button onClick={() => handleDeleteCategory(category.id)}>Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
       {!isFormVisible && (
         <div>
